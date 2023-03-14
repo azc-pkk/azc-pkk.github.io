@@ -405,6 +405,7 @@ mjx-container[display="true"] + br {
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -612,6 +613,26 @@ mjx-container[display="true"] + br {
     
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd032e5b88a5fdc193d2e',
+      clientSecret: 'c7b934bba191a4f08d127f3de1f1cc161c9c0565',
+      repo        : 'azc-pkk.github.io',
+      owner       : 'azc-pkk',
+      admin       : ['azc-pkk'],
+      id          : '859419ce1c324de07d5a88c64ca3e133',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>
