@@ -6,7 +6,7 @@
   <link href="http://azc-pkk.github.io/atom.xml" rel="self"/>
   
   <link href="http://azc-pkk.github.io/"/>
-  <updated>2023-03-25T09:14:51.681Z</updated>
+  <updated>2023-03-25T10:29:42.265Z</updated>
   <id>http://azc-pkk.github.io/</id>
   
   <author>
@@ -17,11 +17,32 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>计算几何（零） 目录及一些定义</title>
+    <link href="http://azc-pkk.github.io/2023-03-25-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%EF%BC%88%E9%9B%B6%EF%BC%89-%E7%9B%AE%E5%BD%95%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%AE%9A%E4%B9%89/"/>
+    <id>http://azc-pkk.github.io/2023-03-25-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%EF%BC%88%E9%9B%B6%EF%BC%89-%E7%9B%AE%E5%BD%95%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%AE%9A%E4%B9%89/</id>
+    <published>2023-03-25T09:47:19.000Z</published>
+    <updated>2023-03-25T10:29:42.265Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;今年 WC 听了宋新波老师的《计算几何及其应用》，回顾整理一下，写一发学习笔记。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="OI" scheme="http://azc-pkk.github.io/categories/OI/"/>
+    
+    
+    <category term="计算几何" scheme="http://azc-pkk.github.io/tags/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95/"/>
+    
+    <category term="学习笔记" scheme="http://azc-pkk.github.io/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>流氓软件讨伐记</title>
     <link href="http://azc-pkk.github.io/2023-03-18-%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6%E8%AE%A8%E4%BC%90%E8%AE%B0/"/>
     <id>http://azc-pkk.github.io/2023-03-18-%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6%E8%AE%A8%E4%BC%90%E8%AE%B0/</id>
     <published>2023-03-18T08:56:54.000Z</published>
-    <updated>2023-03-25T09:14:51.681Z</updated>
+    <updated>2023-03-25T10:16:18.950Z</updated>
     
     
     <summary type="html">&lt;p&gt;帮某老师删除了一下电脑里的流氓软件，记录一下&lt;del&gt;作案&lt;/del&gt;过程。&lt;/p&gt;</summary>
@@ -40,7 +61,7 @@
     <link href="http://azc-pkk.github.io/2023-03-13-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/"/>
     <id>http://azc-pkk.github.io/2023-03-13-%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/</id>
     <published>2023-03-13T04:49:55.000Z</published>
-    <updated>2023-03-25T09:14:54.387Z</updated>
+    <updated>2023-03-25T10:26:45.689Z</updated>
     
     
     <summary type="html">&lt;p&gt;普普通通的开发日志。&lt;/p&gt;</summary>
