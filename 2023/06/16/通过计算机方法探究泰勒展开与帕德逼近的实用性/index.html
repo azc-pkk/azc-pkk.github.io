@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=ZCOOL KuaiLe:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"azc-pkk.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="共同编辑：流星白羽 内容摘要本次探究主要围绕以自然对数 $e$ 为底数的指数函数和对数函数的泰勒展开与帕德逼近，分别为如下公式：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过计算机方法探究泰勒展开与帕德逼近的实用性">
+<meta property="og:url" content="https://azc-pkk.github.io/2023/06/16/%E9%80%9A%E8%BF%87%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6%E6%B3%B0%E5%8B%92%E5%B1%95%E5%BC%80%E4%B8%8E%E5%B8%95%E5%BE%B7%E9%80%BC%E8%BF%91%E7%9A%84%E5%AE%9E%E7%94%A8%E6%80%A7/index.html">
+<meta property="og:site_name" content="北大门淋雨的博客">
+<meta property="og:description" content="共同编辑：流星白羽 内容摘要本次探究主要围绕以自然对数 $e$ 为底数的指数函数和对数函数的泰勒展开与帕德逼近，分别为如下公式：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-06-16T10:04:22.000Z">
+<meta property="article:modified_time" content="2024-07-05T03:17:03.336Z">
+<meta property="article:author" content="北大门淋雨">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://azc-pkk.github.io/2023/06/16/%E9%80%9A%E8%BF%87%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6%E6%B3%B0%E5%8B%92%E5%B1%95%E5%BC%80%E4%B8%8E%E5%B8%95%E5%BE%B7%E9%80%BC%E8%BF%91%E7%9A%84%E5%AE%9E%E7%94%A8%E6%80%A7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>通过计算机方法探究泰勒展开与帕德逼近的实用性 | 北大门淋雨的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">北大门淋雨的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://azc-pkk.github.io/2023/06/16/%E9%80%9A%E8%BF%87%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6%E6%B3%B0%E5%8B%92%E5%B1%95%E5%BC%80%E4%B8%8E%E5%B8%95%E5%BE%B7%E9%80%BC%E8%BF%91%E7%9A%84%E5%AE%9E%E7%94%A8%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="北大门淋雨">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="北大门淋雨的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          通过计算机方法探究泰勒展开与帕德逼近的实用性
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-16 18:04:22" itemprop="dateCreated datePublished" datetime="2023-06-16T18:04:22+08:00">2023-06-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-05 11:17:03" itemprop="dateModified" datetime="2024-07-05T11:17:03+08:00">2024-07-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><i>共同编辑：流星白羽</i></p>
+<h2 id="内容摘要"><a href="#内容摘要" class="headerlink" title="内容摘要"></a>内容摘要</h2><p>本次探究主要围绕以自然对数 $e$ 为底数的指数函数和对数函数的泰勒展开与帕德逼近，分别为如下公式：</p>
+<span id="more"></span>
+<p>泰勒展开：</p>
+<script type="math/tex; mode=display">e^x \approx 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \frac{x^4}{4!}</script><script type="math/tex; mode=display">\ln (x + 1) \approx x - \frac{x^2}{2} + \frac{x^3}{3} - \frac{x^4}{4}</script><blockquote>
+<p>这里的泰勒展开只展开到第 4 项是为了方便用手<del>机</del>计算，例如考试情况下太多项反而不方便计算。</p>
+</blockquote>
+<p>帕德逼近：</p>
+<script type="math/tex; mode=display">e^x \approx \frac{x^2 + 6x + 12}{x^2 - 6x + 12}</script><script type="math/tex; mode=display">\ln (x + 1) \approx \frac{3x^2 + 6x}{x^2 + 6x + 6}</script><p>我们通过比较真实值与公式值之差的绝对值是否小于精度来找寻特定精度下的适用区间。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">check</span><span class="params">(<span class="type">double</span> x, <span class="type">double</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">fabs</span>(x - y) &lt; eps;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><p>这里以泰勒展开的对数式为例，我们知道 $\ln(x+1) -  \text{Taylor}(x+1)$ 是一个单调递增的函数，其零点为 1，我们以零点为界在左右两边做一个二分，求出给点精度下的适用区间。</p>
+<p>Talk is cheap, show me the code!</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">double</span> eps;</span><br><span class="line"><span class="type">int</span> f[<span class="number">50</span>];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">calc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    f[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        f[i] = i * f[i<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">mypow</span><span class="params">(<span class="type">double</span> x, <span class="type">int</span> a)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> res = x;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= a; i++) res *= x;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">taylor</span><span class="params">(<span class="type">double</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> res = x - <span class="built_in">mypow</span>(x, <span class="number">2</span>) / <span class="number">2</span> + <span class="built_in">mypow</span>(x, <span class="number">3</span>) / <span class="number">3</span> - <span class="built_in">mypow</span>(x, <span class="number">4</span>) / <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">check</span><span class="params">(<span class="type">double</span> x, <span class="type">double</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">fabs</span>(x - y) &lt; eps;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">lower_bound</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> l = <span class="number">-1.0</span> + <span class="number">1e-5</span>, r = <span class="number">0.0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="type">double</span> mid = (l + r) / <span class="number">2.0</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">check</span>(<span class="built_in">taylor</span>(mid), <span class="built_in">log</span>(mid + <span class="number">1.0</span>))) r = mid;</span><br><span class="line">        <span class="keyword">else</span> l = mid;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">higher_bound</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> l = <span class="number">0.0</span>, r = <span class="number">4.0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="type">double</span> mid = (l + r) / <span class="number">2.0</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">check</span>(<span class="built_in">taylor</span>(mid), <span class="built_in">log</span>(mid + <span class="number">1.0</span>))) l = mid;</span><br><span class="line">        <span class="keyword">else</span> r = mid;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">recheck</span><span class="params">(<span class="type">double</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ln (x + 1) = %lf\n&quot;</span>, <span class="built_in">log</span>(x + <span class="number">1.0</span>));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Taylor (x + 1) = %lf\n&quot;</span>, <span class="built_in">taylor</span>(x));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="built_in">calc</span>();</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;eps);</span><br><span class="line">    <span class="type">double</span> l = <span class="built_in">lower_bound</span>();</span><br><span class="line">    <span class="type">double</span> r = <span class="built_in">higher_bound</span>();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;(%lf, %lf)\n&quot;</span>, l, r);</span><br><span class="line">    <span class="built_in">recheck</span>(l), <span class="built_in">recheck</span>(r);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><h3 id="对数形式-ln-x-1"><a href="#对数形式-ln-x-1" class="headerlink" title="对数形式 $\ln (x+1)$"></a>对数形式 $\ln (x+1)$</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>精确度</th>
+<th>泰勒展开适用区间</th>
+<th>帕德逼近适用区间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>(-0.717721, 0.979660)</td>
+<td>(-0.857306, 6.008006)</td>
+</tr>
+<tr>
+<td>0.01</td>
+<td>(-0.492910, 0.594940)</td>
+<td>(-0.686938, 2.194257)</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td>(-0.325108, 0.365375)</td>
+<td>(-0.512489, 1.051234)</td>
+</tr>
+<tr>
+<td>0.0001</td>
+<td>(-0.210352, 0.226327)</td>
+<td>(-0.362329, 0.568207)</td>
+</tr>
+<tr>
+<td>0.00001</td>
+<td>(-0.134714, 0.141065)</td>
+<td>(-0.246528, 0.327189)</td>
+</tr>
+<tr>
+<td>0.000001</td>
+<td>(-0.085771, 0.088298)</td>
+<td>(-0.163388, 0.195298)</td>
+</tr>
+<tr>
+<td>0.0000001</td>
+<td>(-0.054420, 0.055426)</td>
+<td>(-0.106410, 0.119082)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="指数形式-e-x"><a href="#指数形式-e-x" class="headerlink" title="指数形式  $e^x$"></a>指数形式  $e^x$</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>精确度</th>
+<th>泰勒展开适用区间</th>
+<th>帕德逼近适用区间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>(-1.732041, 1.552716)</td>
+<td>(-5.054361, 1.647066)</td>
+</tr>
+<tr>
+<td>0.01</td>
+<td>(-1.072578, 1.000996)</td>
+<td>(-2.176107, 1.159476)</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td>(-0.668565, 0.640037)</td>
+<td>(-1.163324, 0.793230)</td>
+</tr>
+<tr>
+<td>0.0001</td>
+<td>(-0.418551, 0.407188)</td>
+<td>(-0.672276, 0.529691)</td>
+</tr>
+<tr>
+<td>0.00001</td>
+<td>(-0.262774, 0.258249)</td>
+<td>(-0.403331, 0.347281)</td>
+</tr>
+<tr>
+<td>0.000001</td>
+<td>(-0.165274, 0.163473)</td>
+<td>(-0.246946, 0.224742)</td>
+</tr>
+<tr>
+<td>0.0000001</td>
+<td>(-0.104072, 0.103355)</td>
+<td>(-0.152979, 0.144158)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由上表可知，当泰勒公式只展开到第四项时，在一些常用的精度要求下，它的适用区间小于帕德逼近。所以在考试等实际情况中，不妨优先考虑帕德逼近。</p>
+<blockquote>
+<p>后话：据某同学所言，实际考试中泰勒展开更便于计算，因为其小数全在分子，而帕德逼近分母可能出现小数。请各位自行判断该用哪个。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>北大门淋雨
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://azc-pkk.github.io/2023/06/16/%E9%80%9A%E8%BF%87%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6%E6%B3%B0%E5%8B%92%E5%B1%95%E5%BC%80%E4%B8%8E%E5%B8%95%E5%BE%B7%E9%80%BC%E8%BF%91%E7%9A%84%E5%AE%9E%E7%94%A8%E6%80%A7/" title="通过计算机方法探究泰勒展开与帕德逼近的实用性">https://azc-pkk.github.io/2023/06/16/通过计算机方法探究泰勒展开与帕德逼近的实用性/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/13/Manacher-%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="Manacher 算法学习笔记">
+      <i class="fa fa-chevron-left"></i> Manacher 算法学习笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/07/05/%E5%BB%BA%E7%AB%99%E6%97%A5%E8%AE%B0%EF%BC%88%E6%96%B0%E7%89%88%EF%BC%89/" rel="next" title="建站日记（新版）">
+      建站日记（新版） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AE%B9%E6%91%98%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">内容摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">2.</span> <span class="nav-text">Code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C"><span class="nav-number">3.</span> <span class="nav-text">结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%95%B0%E5%BD%A2%E5%BC%8F-ln-x-1"><span class="nav-number">3.1.</span> <span class="nav-text">对数形式 $\ln (x+1)$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E6%95%B0%E5%BD%A2%E5%BC%8F-e-x"><span class="nav-number">3.2.</span> <span class="nav-text">指数形式  $e^x$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">北大门淋雨</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/azc-pkk" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;azc-pkk" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">北大门淋雨</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+<div class="runtime">
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/05/2024 12:20:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
