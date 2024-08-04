@@ -20,22 +20,22 @@
     var CONFIG = {"hostname":"azc-pkk.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="2024 年高考后重建自己的博客，之后的更新都记录在这里。">
+  <meta name="description" content="初次接触 CTF，被 SQL 注入搞晕了，于是写一发学习笔记。 本文介绍 SQL 注入中的字符型和整数型（目前只会这两种 QAQ）。 以题目[SWPUCTF 2021 新生赛]easy_sql为例。 学习 SQL 注入之前，最好先有一点 SQL 基础。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="建站日记（新版）">
-<meta property="og:url" content="https://azc-pkk.github.io/2024/07/05/%E5%BB%BA%E7%AB%99%E6%97%A5%E8%AE%B0%EF%BC%88%E6%96%B0%E7%89%88%EF%BC%89/index.html">
+<meta property="og:title" content="SQL 注入学习笔记（一）">
+<meta property="og:url" content="https://azc-pkk.github.io/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
 <meta property="og:site_name" content="北大门淋雨的博客">
-<meta property="og:description" content="2024 年高考后重建自己的博客，之后的更新都记录在这里。">
+<meta property="og:description" content="初次接触 CTF，被 SQL 注入搞晕了，于是写一发学习笔记。 本文介绍 SQL 注入中的字符型和整数型（目前只会这两种 QAQ）。 以题目[SWPUCTF 2021 新生赛]easy_sql为例。 学习 SQL 注入之前，最好先有一点 SQL 基础。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s21.ax1x.com/2024/07/05/pkRV8Ve.md.png">
-<meta property="og:image" content="https://s21.ax1x.com/2024/07/05/pkRV1bD.md.png">
-<meta property="article:published_time" content="2024-07-05T01:19:55.000Z">
-<meta property="article:modified_time" content="2024-07-05T04:28:29.639Z">
+<meta property="article:published_time" content="2024-08-04T03:16:34.000Z">
+<meta property="article:modified_time" content="2024-08-04T03:16:34.654Z">
 <meta property="article:author" content="北大门淋雨">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s21.ax1x.com/2024/07/05/pkRV8Ve.md.png">
 
-<link rel="canonical" href="https://azc-pkk.github.io/2024/07/05/%E5%BB%BA%E7%AB%99%E6%97%A5%E8%AE%B0%EF%BC%88%E6%96%B0%E7%89%88%EF%BC%89/">
+<link rel="canonical" href="https://azc-pkk.github.io/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>建站日记（新版） | 北大门淋雨的博客</title>
+  <title>SQL 注入学习笔记（一） | 北大门淋雨的博客</title>
   
 
 
@@ -275,7 +275,7 @@ mjx-container[display="true"] + br {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://azc-pkk.github.io/2024/07/05/%E5%BB%BA%E7%AB%99%E6%97%A5%E8%AE%B0%EF%BC%88%E6%96%B0%E7%89%88%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://azc-pkk.github.io/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -288,7 +288,7 @@ mjx-container[display="true"] + br {
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          建站日记（新版）
+          SQL 注入学习笔记（一）
         </h1>
 
         <div class="post-meta">
@@ -297,9 +297,17 @@ mjx-container[display="true"] + br {
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-07-05 09:19:55 / 修改时间：12:28:29" itemprop="dateCreated datePublished" datetime="2024-07-05T09:19:55+08:00">2024-07-05</time>
+              <time title="创建时间：2024-08-04 11:16:34" itemprop="dateCreated datePublished" datetime="2024-08-04T11:16:34+08:00">2024-08-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                </span>
             </span>
 
           
@@ -313,48 +321,37 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>2024 年高考后重建自己的博客，之后的更新都记录在这里。</p>
+        <p>初次接触 CTF，被 SQL 注入搞晕了，于是写一发学习笔记。</p>
+<p>本文介绍 SQL 注入中的字符型和整数型（目前只会这两种 QAQ）。</p>
+<p>以题目<a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/387">[SWPUCTF 2021 新生赛]easy_sql</a>为例。</p>
+<p>学习 SQL 注入之前，最好先有一点<a target="_blank" rel="noopener" href="https://www.w3school.com.cn/sql/index.asp"> SQL 基础</a>。</p>
 <span id="more"></span>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这个网站初建于 2023 年 3 月，当时会想到搓一个自己的个人博客是因为参加 NOIP 被打击到了，就放弃了参加省选（现在想来有点遗憾，应该去看看的），然后躺了几个月后重上洛谷，看到搭建博客的教程，就想着自己也来搭一个好了。</p>
-<p>之前的博客从 6 月多开始就没有再更新了，现在高考完了，突然想起我的小网站，又正好换了新电脑，于是重新开始，重建我的博客。</p>
-<p>首先确立写作路线，我想把所有博客分为三大类，分别是技术类，感想类和文艺类。</p>
-<ul>
-<li>技术类：包括学习笔记，题解，环境配置等方面内容。</li>
-<li>感想类：包括读书笔记，电影观后感等方面内容。</li>
-<li>文艺类：自己写的诗歌散文小说之类的。</li>
-</ul>
-<p>其次是版本号的确立，采用 <code>X.X.X</code> 的形式，发生主题、域名等重大改变时第一位加一，增加较大功能第二位加一，修复 Bug、细微的功能增加或改变第三位加一。</p>
-<p>此外，建站时间从今日（2024/7/5）开始重新计算。</p>
-<h3 id="Ver-1-0-0"><a href="#Ver-1-0-0" class="headerlink" title="Ver 1.0.0"></a>Ver 1.0.0</h3><p><strong>2024/7/5</strong> 更新。</p>
-<p>简略的重新配置了一下，比上次花的时间少了很多。</p>
-<ul>
-<li>依旧采用 <code>Hexo</code> 搭建，部署在 <code>Github Pages</code>。</li>
-<li>主题依旧是 <code>NexT.Mist</code>。</li>
-<li>依旧使用 <code>hexo-filter-mathjax</code> + <code>hexo-renderer-kramed</code> + <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.462ex;" xmlns="http://www.w3.org/2000/svg" width="9.118ex" height="2.032ex" role="img" focusable="false" viewBox="0 -694 4030 898"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mi" transform="translate(1051,0)"><path data-c="1D44E" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path></g><g data-mml-node="mi" transform="translate(1580,0)"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g><g data-mml-node="mi" transform="translate(1941,0)"><path data-c="210E" d="M137 683Q138 683 209 688T282 694Q294 694 294 685Q294 674 258 534Q220 386 220 383Q220 381 227 388Q288 442 357 442Q411 442 444 415T478 336Q478 285 440 178T402 50Q403 36 407 31T422 26Q450 26 474 56T513 138Q516 149 519 151T535 153Q555 153 555 145Q555 144 551 130Q535 71 500 33Q466 -10 419 -10H414Q367 -10 346 17T325 74Q325 90 361 192T398 345Q398 404 354 404H349Q266 404 205 306L198 293L164 158Q132 28 127 16Q114 -11 83 -11Q69 -11 59 -2T48 16Q48 30 121 320L195 616Q195 629 188 632T149 637H128Q122 643 122 645T124 664Q129 683 137 683Z"></path></g><g data-mml-node="mi" transform="translate(2517,0)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g><g data-mml-node="mi" transform="translate(2929,0)"><path data-c="1D44E" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path></g><g data-mml-node="mi" transform="translate(3458,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g></g></g></svg></mjx-container> 渲染数学公式。（参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45511189/article/details/115798563">hexo博客next主题添加对数学公式的支持</a>）</li>
-<li>非常幸运的是，<a target="_blank" rel="noopener" href="https://imgse.com/">路过图床</a>依旧能用。</li>
-<li>恢复了 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="4.181ex" height="1.645ex" role="img" focusable="false" viewBox="0 -705 1848 727"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mtext"><path data-c="52" d="M130 622Q123 629 119 631T103 634T60 637H27V683H202H236H300Q376 683 417 677T500 648Q595 600 609 517Q610 512 610 501Q610 468 594 439T556 392T511 361T472 343L456 338Q459 335 467 332Q497 316 516 298T545 254T559 211T568 155T578 94Q588 46 602 31T640 16H645Q660 16 674 32T692 87Q692 98 696 101T712 105T728 103T732 90Q732 59 716 27T672 -16Q656 -22 630 -22Q481 -16 458 90Q456 101 456 163T449 246Q430 304 373 320L363 322L297 323H231V192L232 61Q238 51 249 49T301 46H334V0H323Q302 3 181 3Q59 3 38 0H27V46H60Q102 47 111 49T130 61V622ZM491 499V509Q491 527 490 539T481 570T462 601T424 623T362 636Q360 636 340 636T304 637H283Q238 637 234 628Q231 624 231 492V360H289Q390 360 434 378T489 456Q491 467 491 499Z"></path><path data-c="53" d="M55 507Q55 590 112 647T243 704H257Q342 704 405 641L426 672Q431 679 436 687T446 700L449 704Q450 704 453 704T459 705H463Q466 705 472 699V462L466 456H448Q437 456 435 459T430 479Q413 605 329 646Q292 662 254 662Q201 662 168 626T135 542Q135 508 152 480T200 435Q210 431 286 412T370 389Q427 367 463 314T500 191Q500 110 448 45T301 -21Q245 -21 201 -4T140 27L122 41Q118 36 107 21T87 -7T78 -21Q76 -22 68 -22H64Q61 -22 55 -16V101Q55 220 56 222Q58 227 76 227H89Q95 221 95 214Q95 182 105 151T139 90T205 42T305 24Q352 24 386 62T420 155Q420 198 398 233T340 281Q284 295 266 300Q261 301 239 306T206 314T174 325T141 343T112 367T85 402Q55 451 55 507Z" transform="translate(736,0)"></path><path data-c="53" d="M55 507Q55 590 112 647T243 704H257Q342 704 405 641L426 672Q431 679 436 687T446 700L449 704Q450 704 453 704T459 705H463Q466 705 472 699V462L466 456H448Q437 456 435 459T430 479Q413 605 329 646Q292 662 254 662Q201 662 168 626T135 542Q135 508 152 480T200 435Q210 431 286 412T370 389Q427 367 463 314T500 191Q500 110 448 45T301 -21Q245 -21 201 -4T140 27L122 41Q118 36 107 21T87 -7T78 -21Q76 -22 68 -22H64Q61 -22 55 -16V101Q55 220 56 222Q58 227 76 227H89Q95 221 95 214Q95 182 105 151T139 90T205 42T305 24Q352 24 386 62T420 155Q420 198 398 233T340 281Q284 295 266 300Q261 301 239 306T206 314T174 325T141 343T112 367T85 402Q55 451 55 507Z" transform="translate(1292,0)"></path></g></g></g></svg></mjx-container> 订阅功能。（<a target="_blank" rel="noopener" href="https://blog.csdn.net/axutongxue/article/details/118387116">how to use?</a>）</li>
-<li>依旧使用 <code>ZCOOL KuaiLe</code> 字体，好看。</li>
-<li>增加了本站运行时间</li>
-</ul>
-<p>配置过程中遇到一个奇怪的 Bug：从之前电脑上复制下来的文章在博客首页显示为斜体，而文章页面显示正常。</p>
-<p>对比图：</p>
-<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pkRV8Ve"><img src="https://s21.ax1x.com/2024/07/05/pkRV8Ve.md.png" alt="pkRV8Ve.md.png"></a><br><a target="_blank" rel="noopener" href="https://imgse.com/i/pkRV1bD"><img src="https://s21.ax1x.com/2024/07/05/pkRV1bD.md.png" alt="pkRV1bD.md.png"></a></p>
-<p>经过仔细对比，发现我的 md 文件第一行是空行，而 Hexo 自带的 md 文件没有空行，于是尝试删除该空行。删除后确实不再显示为斜体，但 <code>Front-matter</code> 中的内容显示了出来，文章名也显示为“未命名”。</p>
-<p>尝试写了一篇新博客，发现没有显示问题，于是决定不使用原来的文件，而是新建文件，复制内容。结果正常了。</p>
-<p>但是当我把所有博客复制上来后，这个 Bug 又出现了，于是我决定一篇一篇复制，复制一篇看一下效果。</p>
-<p>经过深度排查后，我发现错误原因在于我在某文件中写了这样一句话：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;i&gt;共同编辑：流星白羽&lt;i&gt;</span><br></pre></td></tr></table></figure>
-<p>相信会 <code>html</code> 的小伙伴都已经看出来了，这是标签未闭合导致的错误。。。而这篇文章刚好是我网站重建前发布的最后一篇文章，这就造成了“新建的文件没问题，复制的文件有问题”的假象。此外，在修复该 Bug 是，我发现 <code>VS Code</code> 中 md 预览已经明确揭示了该问题（整篇文章都是斜体），而我完全没有注意。。。</p>
-<p>至于这个为什么在我原来的网站上能正常显示，我也不知道。。。</p>
-<p>好了，修 Bug 环节到此结束，接下来是之后准备加入的功能：</p>
-<ul>
-<li>Local Search</li>
-<li>评论区</li>
-<li>分享</li>
-<li>优化文章链接</li>
-<li>访客数量统计</li>
-<li>分类和标签</li>
-</ul>
+<p>整数型注入和字符型注入大同小异，区别在于闭合方式，所以第一步是判断闭合方式。</p>
+<h2 id="判断闭合方式"><a href="#判断闭合方式" class="headerlink" title="判断闭合方式"></a>判断闭合方式</h2><h3 id="为什么要判断闭合方式"><a href="#为什么要判断闭合方式" class="headerlink" title="为什么要判断闭合方式"></a>为什么要判断闭合方式</h3><p>举个例子，如果后端的 SQL 语句长这样：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id<span class="operator">=</span><span class="string">'?'</span>; </span><br></pre></td></tr></table></figure>
+<p>其中 <code>?</code> 是我们提交的参数。</p>
+<p>判断字段数时，如果我们直接输 <code>1 oreder by 10086</code>，会发现返回的是正常的页面（按理来说应该报错），而输入<code>1' order by 10086 --+</code>则会报错。</p>
+<p>(<code>--+</code>代表注释，下文有解释)</p>
+<p>所以，要想我们构造的 SQL 语句正常运行，应知道参数的闭合形式。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote><p>MYSQL数据库的包容性比较强，如果你输错了数据的类型，MYSQL数据库会自动将其转换成正确的数据类型，比如输入1)、1”、1-等，只要数字后面的字符不是闭合符的，数据库都会把你输入的错误的数据转换成正确的数据类型。</p>
+<p>但是，若输入的数字后面的字符恰好是闭合符，则会形成闭合，若闭合后形成的sql语句是错误的，那么sql语句执行就会错误，从而造成页面显示错误</p>
+<footer><strong>大大大蜜蜂</strong><cite><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46634468/article/details/120480080">blog.csdn.net/weixin_46634468/article/details/120480080</a></cite></footer></blockquote>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>方法 1.在参数后加闭合符号</p>
+<p>SQL 中的闭合方式基本是单引号、双引号、圆括号的排列组合，一个个试，如果报错则说明猜对了。</p>
+<p>比如例题中，我们由提示知道参数名为<code>wllm</code>，输入<code>?wllm=1</code>，没有报错，<code>?wllm=1'</code>，报错了，说明单引号是闭合符，由于闭合符可以是多个符号组合，可以输入<code>?wllm=1'--+</code>验证，如果报错，说明还有闭合符，可在后面加括号继续试。</p>
+<p>方法 2.利用<code>\</code>（转义字符）</p>
+<p>报错信息中<code>\</code>后面的字符就是闭合符号。</p>
+<p>输入<code>?wllm=1\</code>，发现报错，这时候看<code>\</code>后紧跟着的字符，发现是<code>'</code>，则闭合方式是单引号闭合。</p>
+<h3 id="是什么"><a href="#是什么" class="headerlink" title="--+ 是什么"></a><code>--+</code> 是什么</h3><p>见<a target="_blank" rel="noopener" href="https://blog.csdn.net/xiayun1995/article/details/86500605">此文章</a>。</p>
+<h2 id="判断字段数"><a href="#判断字段数" class="headerlink" title="判断字段数"></a>判断字段数</h2><h3 id="为什么要判断字段数"><a href="#为什么要判断字段数" class="headerlink" title="为什么要判断字段数"></a>为什么要判断字段数</h3><p>因为我们后面要用到<code>union</code>执行我们的<code>select</code>，而 <strong>UNION 内部的 SELECT 语句必须拥有相同数量的列</strong>，因此我们需要知道前一个<code>select</code>语句的字段数。</p>
+<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h3><p>1.order by $num</p>
+<p>$num 小于等于字段数时正常，大于则报错。</p>
+<p>可以使用二分法。</p>
+<p>2.union select 1,2…</p>
+<p>原理在上面。</p>
+<p>例题字段数为 3。</p>
+<h2 id="找回显点"><a href="#找回显点" class="headerlink" title="找回显点"></a>找回显点</h2><p>不想写了，请看<a target="_blank" rel="noopener" href="https://blog.csdn.net/YYYYU_ZHIZZZ/article/details/138388857">此文章</a></p>
+<h2 id="从information-schema库中得到表名，列名。"><a href="#从information-schema库中得到表名，列名。" class="headerlink" title="从information_schema库中得到表名，列名。"></a>从<code>information_schema</code>库中得到表名，列名。</h2><p>这步需要了解一下<code>group_concat()</code>函数和<code>information_schema</code>库，请自行搜索。</p>
 
     </div>
 
@@ -370,7 +367,7 @@ mjx-container[display="true"] + br {
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://azc-pkk.github.io/2024/07/05/%E5%BB%BA%E7%AB%99%E6%97%A5%E8%AE%B0%EF%BC%88%E6%96%B0%E7%89%88%EF%BC%89/" title="建站日记（新版）">https://azc-pkk.github.io/2024/07/05/建站日记（新版）/</a>
+    <a href="https://azc-pkk.github.io/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="SQL 注入学习笔记（一）">https://azc-pkk.github.io/2024/08/04/SQL-注入学习笔记（一）/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -380,6 +377,11 @@ mjx-container[display="true"] + br {
 
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 学习笔记</a>
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/web/" rel="tag"># web</a>
+          </div>
 
         
 
@@ -387,13 +389,10 @@ mjx-container[display="true"] + br {
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/06/16/%E9%80%9A%E8%BF%87%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%B9%E6%B3%95%E6%8E%A2%E7%A9%B6%E6%B3%B0%E5%8B%92%E5%B1%95%E5%BC%80%E4%B8%8E%E5%B8%95%E5%BE%B7%E9%80%BC%E8%BF%91%E7%9A%84%E5%AE%9E%E7%94%A8%E6%80%A7/" rel="prev" title="通过计算机方法探究泰勒展开与帕德逼近的实用性">
-      <i class="fa fa-chevron-left"></i> 通过计算机方法探究泰勒展开与帕德逼近的实用性
+    <a href="/2024/07/05/%E5%BB%BA%E7%AB%99%E6%97%A5%E8%AE%B0%EF%BC%88%E6%96%B0%E7%89%88%EF%BC%89/" rel="prev" title="建站日记（新版）">
+      <i class="fa fa-chevron-left"></i> 建站日记（新版）
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="SQL 注入学习笔记（一）">
-      SQL 注入学习笔记（一） <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -452,7 +451,7 @@ mjx-container[display="true"] + br {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ver-1-0-0"><span class="nav-number">2.</span> <span class="nav-text">Ver 1.0.0</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">判断闭合方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要判断闭合方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.4.</span> <span class="nav-text">--+ 是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E5%AD%97%E6%AE%B5%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">判断字段数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%A4%E6%96%AD%E5%AD%97%E6%AE%B5%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要判断字段数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-1"><span class="nav-number">2.2.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%BE%E5%9B%9E%E6%98%BE%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">找回显点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8Einformation-schema%E5%BA%93%E4%B8%AD%E5%BE%97%E5%88%B0%E8%A1%A8%E5%90%8D%EF%BC%8C%E5%88%97%E5%90%8D%E3%80%82"><span class="nav-number">4.</span> <span class="nav-text">从information_schema库中得到表名，列名。</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
