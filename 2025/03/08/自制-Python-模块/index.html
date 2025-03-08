@@ -20,22 +20,21 @@
     var CONFIG = {"hostname":"azc-pkk.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="初次接触 CTF，被 SQL 注入搞晕了，于是写一发学习笔记。 本文介绍 SQL 注入中的字符型和整数型（目前只会这两种 QAQ）。 以题目[SWPUCTF 2021 新生赛]easy_sql为例。 学习 SQL 注入之前，最好先有一点 SQL 基础。">
+  <meta name="description" content="做题的时候经常会用到一些 python 写的妙妙小工具，用的时候切换目录太麻烦，可以把这些工具打包安装，这样就可以在任意位置 import 了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SQL 注入学习笔记（一）">
-<meta property="og:url" content="https://azc-pkk.github.io/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:title" content="自制 Python 模块">
+<meta property="og:url" content="https://azc-pkk.github.io/2025/03/08/%E8%87%AA%E5%88%B6-Python-%E6%A8%A1%E5%9D%97/index.html">
 <meta property="og:site_name" content="北大门淋雨的博客">
-<meta property="og:description" content="初次接触 CTF，被 SQL 注入搞晕了，于是写一发学习笔记。 本文介绍 SQL 注入中的字符型和整数型（目前只会这两种 QAQ）。 以题目[SWPUCTF 2021 新生赛]easy_sql为例。 学习 SQL 注入之前，最好先有一点 SQL 基础。">
+<meta property="og:description" content="做题的时候经常会用到一些 python 写的妙妙小工具，用的时候切换目录太麻烦，可以把这些工具打包安装，这样就可以在任意位置 import 了。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-08-04T03:16:34.000Z">
-<meta property="article:modified_time" content="2025-03-03T11:03:46.073Z">
+<meta property="article:published_time" content="2025-03-08T15:48:55.000Z">
+<meta property="article:modified_time" content="2025-03-08T15:48:55.077Z">
 <meta property="article:author" content="北大门淋雨">
-<meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="CTF">
-<meta property="article:tag" content="web">
+<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://azc-pkk.github.io/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+<link rel="canonical" href="https://azc-pkk.github.io/2025/03/08/%E8%87%AA%E5%88%B6-Python-%E6%A8%A1%E5%9D%97/">
 
 
 <script id="page-configurations">
@@ -48,7 +47,7 @@
   };
 </script>
 
-  <title>SQL 注入学习笔记（一） | 北大门淋雨的博客</title>
+  <title>自制 Python 模块 | 北大门淋雨的博客</title>
   
 
 
@@ -275,7 +274,7 @@ mjx-container[display="true"] + br {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://azc-pkk.github.io/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://azc-pkk.github.io/2025/03/08/%E8%87%AA%E5%88%B6-Python-%E6%A8%A1%E5%9D%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -288,7 +287,7 @@ mjx-container[display="true"] + br {
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          SQL 注入学习笔记（一）
+          自制 Python 模块
         </h1>
 
         <div class="post-meta">
@@ -298,15 +297,8 @@ mjx-container[display="true"] + br {
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2024-08-04 11:16:34" itemprop="dateCreated datePublished" datetime="2024-08-04T11:16:34+08:00">2024-08-04</time>
+              <time title="创建时间：2025-03-08 23:48:55" itemprop="dateCreated datePublished" datetime="2025-03-08T23:48:55+08:00">2025-03-08</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-03 19:03:46" itemprop="dateModified" datetime="2025-03-03T19:03:46+08:00">2025-03-03</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -328,37 +320,15 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>初次接触 CTF，被 SQL 注入搞晕了，于是写一发学习笔记。</p>
-<p>本文介绍 SQL 注入中的字符型和整数型（目前只会这两种 QAQ）。</p>
-<p>以题目<a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/387">[SWPUCTF 2021 新生赛]easy_sql</a>为例。</p>
-<p>学习 SQL 注入之前，最好先有一点<a target="_blank" rel="noopener" href="https://www.w3school.com.cn/sql/index.asp"> SQL 基础</a>。</p>
+        <p>做题的时候经常会用到一些 python 写的妙妙小工具，用的时候切换目录太麻烦，可以把这些工具打包安装，这样就可以在任意位置 import 了。</p>
 <span id="more"></span>
-<p>整数型注入和字符型注入大同小异，区别在于闭合方式，所以第一步是判断闭合方式。</p>
-<h2 id="判断闭合方式"><a href="#判断闭合方式" class="headerlink" title="判断闭合方式"></a>判断闭合方式</h2><h3 id="为什么要判断闭合方式"><a href="#为什么要判断闭合方式" class="headerlink" title="为什么要判断闭合方式"></a>为什么要判断闭合方式</h3><p>举个例子，如果后端的 SQL 语句长这样：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id<span class="operator">=</span><span class="string">'?'</span>; </span><br></pre></td></tr></table></figure>
-<p>其中 <code>?</code> 是我们提交的参数。</p>
-<p>判断字段数时，如果我们直接输 <code>1 oreder by 10086</code>，会发现返回的是正常的页面（按理来说应该报错），而输入<code>1' order by 10086 --+</code>则会报错。</p>
-<p>(<code>--+</code>代表注释，下文有解释)</p>
-<p>所以，要想我们构造的 SQL 语句正常运行，应知道参数的闭合形式。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><blockquote><p>MYSQL数据库的包容性比较强，如果你输错了数据的类型，MYSQL数据库会自动将其转换成正确的数据类型，比如输入1)、1”、1-等，只要数字后面的字符不是闭合符的，数据库都会把你输入的错误的数据转换成正确的数据类型。</p>
-<p>但是，若输入的数字后面的字符恰好是闭合符，则会形成闭合，若闭合后形成的sql语句是错误的，那么sql语句执行就会错误，从而造成页面显示错误</p>
-<footer><strong>大大大蜜蜂</strong><cite><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46634468/article/details/120480080">blog.csdn.net/weixin_46634468/article/details/120480080</a></cite></footer></blockquote>
-<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>方法 1.在参数后加闭合符号</p>
-<p>SQL 中的闭合方式基本是单引号、双引号、圆括号的排列组合，一个个试，如果报错则说明猜对了。</p>
-<p>比如例题中，我们由提示知道参数名为<code>wllm</code>，输入<code>?wllm=1</code>，没有报错，<code>?wllm=1'</code>，报错了，说明单引号是闭合符，由于闭合符可以是多个符号组合，可以输入<code>?wllm=1'--+</code>验证，如果报错，说明还有闭合符，可在后面加括号继续试。</p>
-<p>方法 2.利用<code>\</code>（转义字符）</p>
-<p>报错信息中<code>\</code>后面的字符就是闭合符号。</p>
-<p>输入<code>?wllm=1\</code>，发现报错，这时候看<code>\</code>后紧跟着的字符，发现是<code>'</code>，则闭合方式是单引号闭合。</p>
-<h3 id="是什么"><a href="#是什么" class="headerlink" title="--+ 是什么"></a><code>--+</code> 是什么</h3><p>见<a target="_blank" rel="noopener" href="https://blog.csdn.net/xiayun1995/article/details/86500605">此文章</a>。</p>
-<h2 id="判断字段数"><a href="#判断字段数" class="headerlink" title="判断字段数"></a>判断字段数</h2><h3 id="为什么要判断字段数"><a href="#为什么要判断字段数" class="headerlink" title="为什么要判断字段数"></a>为什么要判断字段数</h3><p>因为我们后面要用到<code>union</code>执行我们的<code>select</code>，而 <strong>UNION 内部的 SELECT 语句必须拥有相同数量的列</strong>，因此我们需要知道前一个<code>select</code>语句的字段数。</p>
-<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h3><p>1.order by $num</p>
-<p>$num 小于等于字段数时正常，大于则报错。</p>
-<p>可以使用二分法。</p>
-<p>2.union select 1,2…</p>
-<p>原理在上面。</p>
-<p>例题字段数为 3。</p>
-<h2 id="找回显点"><a href="#找回显点" class="headerlink" title="找回显点"></a>找回显点</h2><p>不想写了，请看<a target="_blank" rel="noopener" href="https://blog.csdn.net/YYYYU_ZHIZZZ/article/details/138388857">此文章</a></p>
-<h2 id="从information-schema库中得到表名，列名。"><a href="#从information-schema库中得到表名，列名。" class="headerlink" title="从information_schema库中得到表名，列名。"></a>从<code>information_schema</code>库中得到表名，列名。</h2><p>这步需要了解一下<code>group_concat()</code>函数和<code>information_schema</code>库，请自行搜索。</p>
+<p>以我自己写的变种 base64 为例，文件夹结构如下：<br><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">base64_of_mine/</span><br><span class="line">    |---- setup.py</span><br><span class="line">    L---- base64_of_mine/</span><br><span class="line">        |---- __init__.py</span><br><span class="line">        L---- script.py</span><br></pre></td></tr></table></figure></p>
+<p>setup.py 文件：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=<span class="string">'base64_of_mine'</span>,</span><br><span class="line">    version=<span class="string">'0.1.0'</span>,</span><br><span class="line">    packages=find_packages(),</span><br><span class="line">    author=<span class="string">'BeiDAmen_Linyu'</span>,</span><br><span class="line">    description=<span class="string">'base64'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure><br>setup 还有其他参数，但是我暂时应该用不到。</p>
+<p>__init__.py 文件：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> script</span><br><span class="line"></span><br><span class="line">decrypt = script.decrypt</span><br></pre></td></tr></table></figure><br>该文件具体用途参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/115350758">这里</a>。</p>
+<p>script.py 里就是一个 <code>decrypt</code> 函数，接受一个表和一个密文，返回解密结果。</p>
+<p>然后在 setup.py 那一级打开 cmd，输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install .</span><br></pre></td></tr></table></figure></p>
+<p>就大功告成了。</p>
+<p>安装完之后，如果在命令行里用的时候报错没有该模块，有可能是你电脑里 python 版本太多，各种 python 和 pip 混着用了。</p>
 
     </div>
 
@@ -374,7 +344,7 @@ mjx-container[display="true"] + br {
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://azc-pkk.github.io/2024/08/04/SQL-%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="SQL 注入学习笔记（一）">https://azc-pkk.github.io/2024/08/04/SQL-注入学习笔记（一）/</a>
+    <a href="https://azc-pkk.github.io/2025/03/08/%E8%87%AA%E5%88%B6-Python-%E6%A8%A1%E5%9D%97/" title="自制 Python 模块">https://azc-pkk.github.io/2025/03/08/自制-Python-模块/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -385,9 +355,8 @@ mjx-container[display="true"] + br {
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 学习笔记</a>
               <a href="/tags/CTF/" rel="tag"># CTF</a>
-              <a href="/tags/web/" rel="tag"># web</a>
+              <a href="/tags/Python/" rel="tag"># Python</a>
           </div>
 
         
@@ -396,13 +365,10 @@ mjx-container[display="true"] + br {
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/05/13/Manacher-%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="Manacher 算法学习笔记">
-      <i class="fa fa-chevron-left"></i> Manacher 算法学习笔记
+    <a href="/2024/12/04/%E6%89%8B%E8%84%B1-Upx-%E5%A3%B3/" rel="prev" title="手脱 Upx 壳">
+      <i class="fa fa-chevron-left"></i> 手脱 Upx 壳
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2024/12/04/CNSS-Recruit-2024-Re-WP/" rel="next" title="CNSS Recruit 2024 Re WP">
-      CNSS Recruit 2024 Re WP <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -461,7 +427,6 @@ mjx-container[display="true"] + br {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">判断闭合方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要判断闭合方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.4.</span> <span class="nav-text">--+ 是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E5%AD%97%E6%AE%B5%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">判断字段数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%A4%E6%96%AD%E5%AD%97%E6%AE%B5%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要判断字段数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-1"><span class="nav-number">2.2.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%BE%E5%9B%9E%E6%98%BE%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">找回显点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8Einformation-schema%E5%BA%93%E4%B8%AD%E5%BE%97%E5%88%B0%E8%A1%A8%E5%90%8D%EF%BC%8C%E5%88%97%E5%90%8D%E3%80%82"><span class="nav-number">4.</span> <span class="nav-text">从information_schema库中得到表名，列名。</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
