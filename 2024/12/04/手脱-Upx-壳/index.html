@@ -1,26 +1,25 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s21.ax1x.com/2025/09/05/pV2V56K.jpg">
+  <link rel="icon" href="https://s21.ax1x.com/2025/09/05/pV2V56K.jpg">
+  
 
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=ZCOOL KuaiLe:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"azc-pkk.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
-
-  <meta name="description" content="记录学习手脱 Upx 壳的过程，分 PE 篇和 ELF 篇。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="北大门淋雨">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="记录学习手脱 Upx 壳的过程，分 PE 篇和 ELF 篇。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="手脱 Upx 壳">
 <meta property="og:url" content="https://azc-pkk.github.io/2024/12/04/%E6%89%8B%E8%84%B1-Upx-%E5%A3%B3/index.html">
@@ -41,54 +40,63 @@
 <meta property="article:tag" content="CTF">
 <meta property="article:tag" content="Re">
 <meta property="article:tag" content="壳">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://azc-pkk.github.io/2024/12/04/%E6%89%8B%E8%84%B1-Upx-%E5%A3%B3/%E6%89%8B%E8%84%B1-Upx-%E5%A3%B3/a.png">
+  
+  
+  
+  <title>手脱 Upx 壳 - 北大门淋雨的博客</title>
 
-<link rel="canonical" href="https://azc-pkk.github.io/2024/12/04/%E6%89%8B%E8%84%B1-Upx-%E5%A3%B3/">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
 
-  <title>手脱 Upx 壳 | 北大门淋雨的博客</title>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
 
 
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"azc-pkk.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
 
 
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-<style>mjx-container[jax="SVG"] {
+  
+<meta name="generator" content="Hexo 7.3.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
 
@@ -202,470 +210,640 @@ mjx-container[display="true"] + br {
 }
 </style></head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
+<body>
+  
 
-  <div class="site-meta">
+  <header>
+    
 
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">北大门淋雨的博客</h1>
-      <span class="logo-line-after"><i></i></span>
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
     </a>
-  </div>
 
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-  </ul>
 </nav>
 
+  
 
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="手脱 Upx 壳"></span>
+          
+        </div>
 
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:56" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
 
-</div>
-    </header>
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          760 字
+        
+      </span>
+    
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
   </div>
 
 
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content post posts-expand">
-            
-
-    
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://azc-pkk.github.io/2024/12/04/%E6%89%8B%E8%84%B1-Upx-%E5%A3%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="北大门淋雨">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="北大门淋雨的博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          手脱 Upx 壳
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2024-12-04 16:56:15" itemprop="dateCreated datePublished" datetime="2024-12-04T16:56:15+08:00">2024-12-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-03 19:03:42" itemprop="dateModified" datetime="2025-03-03T19:03:42+08:00">2025-03-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+        
+      </div>
 
       
-        <p>记录学习手脱 Upx 壳的过程，分 PE 篇和 ELF 篇。</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">手脱 Upx 壳</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    本文最后更新于 2025-03-03T19:03:42+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>记录学习手脱 Upx 壳的过程，分 PE 篇和 ELF 篇。</p>
 <span id="more"></span>
 <h2 id="手动脱壳的原理"><a href="#手动脱壳的原理" class="headerlink" title="手动脱壳的原理"></a>手动脱壳的原理</h2><p>在加壳的程序执行时，壳会先于原程序执行，将原程序恢复。通过动态调试的方式将程序运行到壳执行结束的时刻，此时内存中已有恢复了的原程序，将这部分内存复制一份，就得到了脱完壳的程序。</p>
 <h2 id="PE-篇"><a href="#PE-篇" class="headerlink" title="PE 篇"></a>PE 篇</h2><p>例题：<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#%E6%96%B0%E5%B9%B4%E5%BF%AB%E4%B9%90">BUUCTF 新年快乐</a></p>
 <p>需要用到工具 x32dbg，Exeinfo PE。</p>
 <p>先用 Exeinfo 查壳，发现是 upx。</p>
-<p><img src="手脱-Upx-壳/a.png" alt=""></p>
+<p><img src="手脱-Upx-壳/a.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>然后使用 x32dbg 打开文件：</p>
-<p><img src="手脱-Upx-壳/b.png" alt=""></p>
+<p><img src="手脱-Upx-壳/b.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>根据<strong>堆栈平衡原理</strong>脱壳。</p>
 <blockquote>
 <p>堆栈平衡原理：</p>
 <p>upx 壳运行时，会先将所有寄存器入栈（<code>pushad</code>），根据栈先进后出的特性，这些寄存器会在壳运行结束处附近出栈，所以我们只需找到程序开始的 <code>pushad</code> 指令，执行完该指令后对 <code>esp</code> 指向的内存地址打一个断点，就能快速找到 upx 壳的结束部分。</p>
 </blockquote>
 <p>x32dbg 自动发现了 <code>pushad</code>，可以在<strong>断点</strong>栏看到：</p>
-<p><img src="手脱-Upx-壳/c.png" alt=""></p>
+<p><img src="手脱-Upx-壳/c.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>运行程序，直到程序在 <code>pushad</code> 处停下。</p>
-<p><img src="手脱-Upx-壳/d.png" alt=""></p>
+<p><img src="手脱-Upx-壳/d.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>执行 <code>pushad</code>，然后转到对 <code>esp</code> 指向的地址打断点：</p>
-<p><img src="手脱-Upx-壳/e.png" alt=""></p>
-<p><img src="手脱-Upx-壳/f.png" alt=""></p>
+<p><img src="手脱-Upx-壳/e.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="手脱-Upx-壳/f.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>运行，果然在 <code>popad</code> 执行后停下了：</p>
-<p><img src="手脱-Upx-壳/g.png" alt=""></p>
+<p><img src="手脱-Upx-壳/g.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>到这里壳基本执行完了，下一个无条件跳转就会跳到原程序的入口。所以我们一路步过到那条 <code>jmp</code>，然后 dump 内存。</p>
-<p><img src="手脱-Upx-壳/h.png" alt=""></p>
+<p><img src="手脱-Upx-壳/h.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>得到的程序已能用 IDA 正常反编译。</p>
 <h2 id="ELF-篇"><a href="#ELF-篇" class="headerlink" title="ELF 篇"></a>ELF 篇</h2><p>例题：<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#[GUET-CTF2019]re">[GUET-CTF2019]re</a></p>
 <p>elf 文件无法在 windows 下运行，故需要用 IDA 进行远程调试。</p>
 <p>elf 文件同样可以用 Exeinfo 查壳。</p>
 <p>懒得写了，这个讲得挺好的：<a target="_blank" rel="noopener" href="https://drootkit.github.io/MyArticles/Re/idaunpackELF.html">运行时压缩壳 - IDA动调ELF脱壳</a></p>
 <p>贴个关键脚本：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;idc.idc&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_LOAD              1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PT_DYNAMIC           2</span></span><br><span class="line"><span class="type">static</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">auto</span> ImageBase,StartImg,EndImg;</span><br><span class="line">    <span class="keyword">auto</span> e_phoff;</span><br><span class="line">    <span class="keyword">auto</span> e_phnum,p_offset;</span><br><span class="line">    <span class="keyword">auto</span> i,dumpfile;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 基地址和起始地址，这里根据实际修改，一般不用改</span></span><br><span class="line">    ImageBase=<span class="number">0x400000</span>;</span><br><span class="line">    StartImg=<span class="number">0x400000</span>;</span><br><span class="line">    EndImg=<span class="number">0x0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查是不是elf文件</span></span><br><span class="line">    <span class="keyword">if</span> (Dword(ImageBase)==<span class="number">0x7f454c46</span> || Dword(ImageBase)==<span class="number">0x464c457f</span> )</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">if</span>(dumpfile=fopen(<span class="string">"D:\\dumpfile"</span>,<span class="string">"wb"</span>))<span class="comment">//更改路径</span></span><br><span class="line">        {</span><br><span class="line">            <span class="comment">// 计算程序头表的偏移和条目数量</span></span><br><span class="line">            e_phoff=ImageBase+Qword(ImageBase+<span class="number">0x20</span>);</span><br><span class="line">            Message(<span class="string">"e_phoff = 0x%x\n"</span>, e_phoff);</span><br><span class="line">            e_phnum=Word(ImageBase+<span class="number">0x38</span>);</span><br><span class="line">            Message(<span class="string">"e_phnum = 0x%x\n"</span>, e_phnum);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 遍历程序头表中的每个条目</span></span><br><span class="line">            <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;e_phnum;i++)</span><br><span class="line">            {</span><br><span class="line">                <span class="comment">// 检查程序头条目的类型是否为加载段或动态加载信息段</span></span><br><span class="line">                <span class="keyword">if</span> (Dword(e_phoff)==PT_LOAD || Dword(e_phoff)==PT_DYNAMIC)</span><br><span class="line">                {</span><br><span class="line">                    <span class="comment">// 段在文件中的偏移</span></span><br><span class="line">                    p_offset=Qword(e_phoff+<span class="number">0x8</span>);</span><br><span class="line">                    <span class="comment">// 段的起始地址</span></span><br><span class="line">                    StartImg=Qword(e_phoff+<span class="number">0x10</span>);</span><br><span class="line">                    <span class="comment">// 段的结束地址</span></span><br><span class="line">                    EndImg=StartImg+Qword(e_phoff+<span class="number">0x28</span>);</span><br><span class="line">                    Message(<span class="string">"start = 0x%x, end = 0x%x, offset = 0x%x\n"</span>, StartImg, EndImg, p_offset);</span><br><span class="line">                    <span class="comment">// 将段的内容保存到文件</span></span><br><span class="line">                    dump(dumpfile,StartImg,EndImg,p_offset);</span><br><span class="line">                    Message(<span class="string">"dump segment %d ok.\n"</span>,i);</span><br><span class="line">                }</span><br><span class="line">                <span class="comment">// 更新程序头表的偏移</span></span><br><span class="line">                e_phoff=e_phoff+<span class="number">0x38</span>;</span><br><span class="line">            }</span><br><span class="line">           <span class="comment">// 指向程序头表的偏移位置</span></span><br><span class="line">           fseek(dumpfile,<span class="number">0x3c</span>,<span class="number">0</span>);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           <span class="comment">// 存储着程序头表中每个条目的大小</span></span><br><span class="line">           fseek(dumpfile,<span class="number">0x28</span>,<span class="number">0</span>);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fputc(<span class="number">0x00</span>,dumpfile);</span><br><span class="line">           fclose(dumpfile);</span><br><span class="line">        } <span class="keyword">else</span> Message(<span class="string">"dump err."</span>);</span><br><span class="line">   }</span><br><span class="line">}</span><br><span class="line"><span class="type">static</span> <span class="title function_">dump</span><span class="params">(dumpfile,startimg,endimg,offset)</span> </span><br><span class="line">{</span><br><span class="line">    <span class="keyword">auto</span> i;</span><br><span class="line">    <span class="keyword">auto</span> size;</span><br><span class="line">    size=endimg-startimg;</span><br><span class="line">    fseek(dumpfile,offset,<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> ( i=<span class="number">0</span>; i &lt; size; i=i+<span class="number">1</span> ) </span><br><span class="line">        fputc(Byte(startimg+i),dumpfile);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;idc.idc&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> PT_LOAD              1</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> PT_DYNAMIC           2</span><br><span class="hljs-type">static</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>{<br>    <span class="hljs-keyword">auto</span> ImageBase,StartImg,EndImg;<br>    <span class="hljs-keyword">auto</span> e_phoff;<br>    <span class="hljs-keyword">auto</span> e_phnum,p_offset;<br>    <span class="hljs-keyword">auto</span> i,dumpfile;<br><br>    <span class="hljs-comment">// 基地址和起始地址，这里根据实际修改，一般不用改</span><br>    ImageBase=<span class="hljs-number">0x400000</span>;<br>    StartImg=<span class="hljs-number">0x400000</span>;<br>    EndImg=<span class="hljs-number">0x0</span>;<br><br>    <span class="hljs-comment">// 检查是不是elf文件</span><br>    <span class="hljs-keyword">if</span> (Dword(ImageBase)==<span class="hljs-number">0x7f454c46</span> || Dword(ImageBase)==<span class="hljs-number">0x464c457f</span> )<br>    {<br>        <span class="hljs-keyword">if</span>(dumpfile=fopen(<span class="hljs-string">"D:\\dumpfile"</span>,<span class="hljs-string">"wb"</span>))<span class="hljs-comment">//更改路径</span><br>        {<br>            <span class="hljs-comment">// 计算程序头表的偏移和条目数量</span><br>            e_phoff=ImageBase+Qword(ImageBase+<span class="hljs-number">0x20</span>);<br>            Message(<span class="hljs-string">"e_phoff = 0x%x\n"</span>, e_phoff);<br>            e_phnum=Word(ImageBase+<span class="hljs-number">0x38</span>);<br>            Message(<span class="hljs-string">"e_phnum = 0x%x\n"</span>, e_phnum);<br><br>            <span class="hljs-comment">// 遍历程序头表中的每个条目</span><br>            <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;e_phnum;i++)<br>            {<br>                <span class="hljs-comment">// 检查程序头条目的类型是否为加载段或动态加载信息段</span><br>                <span class="hljs-keyword">if</span> (Dword(e_phoff)==PT_LOAD || Dword(e_phoff)==PT_DYNAMIC)<br>                {<br>                    <span class="hljs-comment">// 段在文件中的偏移</span><br>                    p_offset=Qword(e_phoff+<span class="hljs-number">0x8</span>);<br>                    <span class="hljs-comment">// 段的起始地址</span><br>                    StartImg=Qword(e_phoff+<span class="hljs-number">0x10</span>);<br>                    <span class="hljs-comment">// 段的结束地址</span><br>                    EndImg=StartImg+Qword(e_phoff+<span class="hljs-number">0x28</span>);<br>                    Message(<span class="hljs-string">"start = 0x%x, end = 0x%x, offset = 0x%x\n"</span>, StartImg, EndImg, p_offset);<br>                    <span class="hljs-comment">// 将段的内容保存到文件</span><br>                    dump(dumpfile,StartImg,EndImg,p_offset);<br>                    Message(<span class="hljs-string">"dump segment %d ok.\n"</span>,i);<br>                }<br>                <span class="hljs-comment">// 更新程序头表的偏移</span><br>                e_phoff=e_phoff+<span class="hljs-number">0x38</span>;<br>            }<br>           <span class="hljs-comment">// 指向程序头表的偏移位置</span><br>           fseek(dumpfile,<span class="hljs-number">0x3c</span>,<span class="hljs-number">0</span>);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           <span class="hljs-comment">// 存储着程序头表中每个条目的大小</span><br>           fseek(dumpfile,<span class="hljs-number">0x28</span>,<span class="hljs-number">0</span>);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fputc(<span class="hljs-number">0x00</span>,dumpfile);<br>           fclose(dumpfile);<br>        } <span class="hljs-keyword">else</span> Message(<span class="hljs-string">"dump err."</span>);<br>   }<br>}<br><span class="hljs-type">static</span> <span class="hljs-title function_">dump</span><span class="hljs-params">(dumpfile,startimg,endimg,offset)</span> <br>{<br>    <span class="hljs-keyword">auto</span> i;<br>    <span class="hljs-keyword">auto</span> size;<br>    size=endimg-startimg;<br>    fseek(dumpfile,offset,<span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">for</span> ( i=<span class="hljs-number">0</span>; i &lt; size; i=i+<span class="hljs-number">1</span> ) <br>        fputc(Byte(startimg+i),dumpfile);<br>}<br></code></pre></td></tr></table></figure>
 
-    </div>
-
-    
-    
-    
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>北大门淋雨
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://azc-pkk.github.io/2024/12/04/%E6%89%8B%E8%84%B1-Upx-%E5%A3%B3/" title="手脱 Upx 壳">https://azc-pkk.github.io/2024/12/04/手脱-Upx-壳/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/CTF/" rel="tag"># CTF</a>
-              <a href="/tags/Re/" rel="tag"># Re</a>
-              <a href="/tags/%E5%A3%B3/" rel="tag"># 壳</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2024/12/04/CNSS-Recruit-2024-Re-WP/" rel="prev" title="CNSS Recruit 2024 Re WP">
-      <i class="fa fa-chevron-left"></i> CNSS Recruit 2024 Re WP
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2025/03/08/%E8%87%AA%E5%88%B6-Python-%E6%A8%A1%E5%9D%97/" rel="next" title="自制 Python 模块">
-      自制 Python 模块 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
   
-  
-  
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E8%84%B1%E5%A3%B3%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">手动脱壳的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PE-%E7%AF%87"><span class="nav-number">2.</span> <span class="nav-text">PE 篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELF-%E7%AF%87"><span class="nav-number">3.</span> <span class="nav-text">ELF 篇</span></a></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">北大门淋雨</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">6</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">9</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/azc-pkk" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;azc-pkk" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-  </div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2025</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">北大门淋雨</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
-  </div>
-
-<div class="runtime">
-<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
-<script>
-    var now = new Date(); 
-    function createtime() { 
-        var grt= new Date("07/05/2024 12:20:00");//此处修改你的建站时间或者网站上线时间 
-        now.setTime(now.getTime()+250); 
-        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
-        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
-        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
-        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
-        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
-        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
-        document.getElementById("timeDate").innerHTML = "本站已运行 "+dnum+" 天 "; 
-        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
-    } 
-setInterval("createtime()",250);
-</script>
-</div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
       
 
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-          load: ['[tex]/mhchem'],
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-          packages: {'[+]': ['mhchem']},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
+<span class="category-chains">
+  
+  
     
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CTF/" class="print-no-link">#CTF</a>
+      
+        <a href="/tags/Re/" class="print-no-link">#Re</a>
+      
+        <a href="/tags/%E5%A3%B3/" class="print-no-link">#壳</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>手脱 Upx 壳</div>
+      <div>https://azc-pkk.github.io/2024/12/04/手脱-Upx-壳/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>北大门淋雨</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/CNSS-Recruit-2024-Re-WP/" title="CNSS Recruit 2024 Re WP">
+                        <span class="hidden-mobile">CNSS Recruit 2024 Re WP</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
 
   
 
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <div> <span id="timeDate"></span> <span id="times"></span> <script> var now = new Date(); function createtime() { var grt= new Date("07/05/2024 12:20:00"); now.setTime(now.getTime()+250); days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} document.getElementById("timeDate").innerHTML = "b3dman 的秘密基地已悄悄运行 "+dnum+" 天 "; document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; } setInterval("createtime()",250); </script> <span id="timeDate"></span><span id="times"></span> <div> <div> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Powered by Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> </div> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
 </html>
