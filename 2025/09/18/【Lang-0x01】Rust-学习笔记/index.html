@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://www.rust-lang.org/static/images/rust-logo-blk.svg">
 <meta property="article:published_time" content="2025-09-18T02:48:07.000Z">
-<meta property="article:modified_time" content="2025-09-18T02:59:31.213Z">
+<meta property="article:modified_time" content="2025-09-19T06:33:32.016Z">
 <meta property="article:author" content="北大门淋雨">
 <meta property="article:tag" content="Rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -349,7 +349,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.4k 字
+          3.5k 字
         
       </span>
     
@@ -360,7 +360,7 @@ mjx-container[display="true"] + br {
         
         
         
-          21 分钟
+          30 分钟
         
       </span>
     
@@ -402,7 +402,7 @@ mjx-container[display="true"] + br {
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2025-09-18T10:59:31+08:00
+                    本文最后更新于 2025-09-19T14:33:32+08:00
                   
                   
 
@@ -549,26 +549,26 @@ mjx-container[display="true"] + br {
 <p><strong>所有权</strong>（<em>ownership</em>）是 Rust 用于如何管理内存的一组规则。</p>
 </blockquote>
 <p>所有权系统可以说是 rust 的立身之本，主要思想是通过编译器严格的检查使得 rust 在没有垃圾收集机制的情况下也不会产生垃圾。使得 rust 兼具安全与高性能的特点。</p>
-<p>所有权系统主要针对在堆上申请了内存的变量。栈上的变量是不需要所有权系统的，因为在函数结束时栈上的空间就被释放了。</p>
+<p>所有权系统主要针对在堆上申请了内存的变量。栈上的变量是不需要所有权系统的，因为在函数结束时栈上的空间就被释放了。但是 rusts 还是默认了所有类型都适用所有权规则，我们需要通过实现 <code>Copy</code> trait 来显式地告诉编译器：这个类型不会用到堆区内存，不用管它。</p>
 <h2 id="所有权规则"><a href="#所有权规则" class="headerlink" title="所有权规则"></a>所有权规则</h2><ol>
 <li>Rust 中的每一个值都有一个 <strong>所有者</strong>（<em>owner</em>）。</li>
 <li>值在任一时刻有且只有一个所有者。</li>
 <li>当所有者离开作用域，这个值将被丢弃。</li>
 </ol>
 <h2 id="所有权系统的实现"><a href="#所有权系统的实现" class="headerlink" title="所有权系统的实现"></a>所有权系统的实现</h2><p><strong>部分为笔者猜测，未经考察</strong></p>
-<h3 id="第三条规则的实现"><a href="#第三条规则的实现" class="headerlink" title="第三条规则的实现"></a>第三条规则的实现</h3><p>每种类型都可以实现两种特殊的函数，<code>copy</code>和 <code>drop</code>。</p>
-<p>如果一种类型实现了 <code>drop</code> 函数，rust 编译器将会在这个类型的所有实例离开其所在作用域时调用 <code>drop</code> 函数。</p>
-<p>实现了 <code>copy</code> 函数的类型不受所有权系统的影响。</p>
-<p>所有需要堆区内存的类型都必须实现 <code>drop</code> 函数。</p>
-<p>一个类型不能同时实现 <code>copy</code> 和 <code>drop</code>。</p>
 <h3 id="第一、二条规则的实现"><a href="#第一、二条规则的实现" class="headerlink" title="第一、二条规则的实现"></a>第一、二条规则的实现</h3><p>再次强调一点，所有权规则本质上是编译器约束 rust 书写的源代码，并不是在二进制文件中实现了这套规则。</p>
 <p>形如</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"value"</span>);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">s2</span> = s1;<br></code></pre></td></tr></table></figure>
 <p>这种代码被 rust 称为 <strong>移动（move）</strong>。本质上是浅拷贝（复制指向堆区的指针而不是重新申请一片堆区内存）加上 rust 编译器的检查机制。实际存储 <code>"value"</code> 的堆内存所有权被转移给了 <code>s2</code>，此后 <code>s1</code> 无权再使用这片内存（在编译阶段检查）。这就是第二条规则。</p>
 <p>BTW，在 rust 中，深拷贝由 <code>.clone()</code> 函数实现。</p>
 <p>第一条规则好像不需要实现。</p>
+<h3 id="第三条规则的实现"><a href="#第三条规则的实现" class="headerlink" title="第三条规则的实现"></a>第三条规则的实现</h3><p>每种类型都可以实现两种特殊的 trait，<code>Copy</code>和 <code>Drop</code>。</p>
+<p>如果一种类型实现了 <code>Drop</code> trait， rust 编译器将会在这个类型的所有实例离开其所在作用域时调用 <code>drop</code> 函数。</p>
+<p>一个类型不能同时实现 <code>Copy</code> 和 <code>Drop</code>。</p>
+<p>当一个 Rust 结构体既没有实现 <code>Copy</code> trait 又没有实现 <code>Drop</code> trait时，Rust 会在其作用域结束时自动调用析构器并释放其内存。</p>
+<p>如果一种类型实现了 <code>Copy</code> trait，移动行为又变回了浅拷贝行为。</p>
 <h2 id="引用与借用"><a href="#引用与借用" class="headerlink" title="引用与借用"></a>引用与借用</h2><p>使用所有权系统会产生一个问题，就是只要发生移动行为，原变量就不再可用了。一般语言函数传参习惯用浅拷贝，而在 rust 中所有浅拷贝都被编译器监督变成了所谓的移动。所以在 rust 中，函数传参只能传引用。（其实也可以移动，把参数当做返回值还回去就行了。）</p>
-<p>笔者猜测所有权系统会检查变量的类型，只有在变量类型直接实现了 <code>drop</code> 函数时会采用第三条规则。指针（引用类型）没有实现 <code>drop</code> 函数，因此可以用于安全的传参。</p>
+<p>指针（引用类型）实现了 <code>Copy</code> trait，因此可以用于安全的传参。</p>
 <p>rust 有一个自动解引用的特性，像下面这样，不用自己手动解引用。</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"value"</span>);<br>    <span class="hljs-title function_ invoke__">function</span>(&amp;s1);<br>}<br>  <br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">function</span>(s: &amp;<span class="hljs-type">String</span>) {<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"hello, {s}"</span>); <span class="hljs-comment">// s 实际上是个指针</span><br>}<br></code></pre></td></tr></table></figure>
 <h3 id="可变引用与不可变引用"><a href="#可变引用与不可变引用" class="headerlink" title="可变引用与不可变引用"></a>可变引用与不可变引用</h3><p>默认的引用不能修改被引用变量的值，只有加上 <code>mut</code> 关键字才行。</p>
@@ -590,6 +590,73 @@ mjx-container[display="true"] + br {
 <p>像这样：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"hello world"</span>);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">hello</span> = &amp;s[<span class="hljs-number">0</span>..<span class="hljs-number">5</span>];<br><span class="hljs-keyword">let</span> <span class="hljs-variable">world</span> = &amp;s[<span class="hljs-number">6</span>..<span class="hljs-number">11</span>];<br></code></pre></td></tr></table></figure>
 <p><img src="https://kaisery.github.io/trpl-zh-cn/img/trpl04-07.svg" srcset="/img/loading.gif" lazyload alt="偷来的图"><br>字符串 slice 的类型是 <code>&amp;str</code>，<code>i32</code> 数组的 slice 类型是 <code>&amp;[i32]</code>。</p>
+<h1 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h1><p>感觉更像是类（class）。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">name</span>{<br>	var: <span class="hljs-title function_ invoke__">type</span>(,)<br>}<br></code></pre></td></tr></table></figure>
+<p>最后不用加分号。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">inst</span> = struct_name{<br>	var_name: val,<br>};<br></code></pre></td></tr></table></figure>
+<p>参数和字段名相同可以简写：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">build_user</span>(email: <span class="hljs-type">String</span>, username: <span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> User {<br>    User {<br>        active: <span class="hljs-literal">true</span>,<br>        username,<br>        email,<br>        sign_in_count: <span class="hljs-number">1</span>,<br>    }<br>}<br></code></pre></td></tr></table></figure>
+<p>结构体更新语法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">user2</span> = User {<br>	active: user1.active,<br>	username: user1.username,<br>	email: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"another@example.com"</span>),<br>	sign_in_count: user1.sign_in_count,<br>};<br></code></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">user2</span> = User {<br>	email: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"another@example.com"</span>),<br>	..user1<br>};<br></code></pre></td></tr></table></figure>
+<p>这种方法也会使原来的实例失去相应的所有权。</p>
+<p>对于所有字段类型都实现了 <code>Copy</code> trait，但自己没有实现的结构体，</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rectangle</span> {<br>    width: <span class="hljs-type">u32</span>,<br>    height: <span class="hljs-type">u32</span>,<br>}<br><br><span class="hljs-comment">// guess_num</span><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = Rectangle {<br>        width: <span class="hljs-number">10</span>,<br>        height: <span class="hljs-number">10</span><br>    };<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">aaa</span> = s1.height;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"{}"</span>, s1.height);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s2</span> = s1;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"{}"</span>, s1.height);<br>}<br></code></pre></td></tr></table></figure>
+<p>第一个 <code>println!</code> 是可以的，第二个报错。</p>
+<h2 id="元组结构体"><a href="#元组结构体" class="headerlink" title="元组结构体"></a>元组结构体</h2><p>没有字段名，只有字段类型。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Color</span>(<span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>);<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Point</span>(<span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>);<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">black</span> = <span class="hljs-title function_ invoke__">Color</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">origin</span> = <span class="hljs-title function_ invoke__">Point</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>}<br></code></pre></td></tr></table></figure>
+<p>也可以解构，但是必须加上结构体名：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">Point</span>(x, y, z) = origin;<br></code></pre></td></tr></table></figure>
+<h2 id="类单元结构体"><a href="#类单元结构体" class="headerlink" title="类单元结构体"></a>类单元结构体</h2><p>类单元结构体（<em>unit-like structs</em>）没有任何字段。一般用于实现 trait。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">AlwaysEqual</span>;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">subject</span> = AlwaysEqual;<br>}<br></code></pre></td></tr></table></figure>
+<h2 id="为结构体实现-Debug-trait"><a href="#为结构体实现-Debug-trait" class="headerlink" title="为结构体实现 Debug trait"></a>为结构体实现 <code>Debug</code> trait</h2><p>直接用 <code>println!</code> 打印结构体是不行的，因为没有实现 <code>Display</code> trait。</p>
+<p><code>Display</code> trait 需要手动实现，有点麻烦。</p>
+<p>rust 还有一个方便的打印调试信息的功能，可以用 <code>println!("{:?}")</code> 打印调试信息，这个功能需要实现 <code>Debug</code>trait，但不用手动实现，只要为结构体加上外部属性 <code>#[derive(Debug)]</code> 就行。</p>
+<p>还可以通过把 <code>{:?}</code> 替换成 <code>{:#?}</code> 美化输出。也可以用 <code>dbg!</code> 宏，<code>dbg!</code> 宏接受一个表达式的所有权，再返回该值的所有权。</p>
+<h2 id="为结构体定义方法"><a href="#为结构体定义方法" class="headerlink" title="为结构体定义方法"></a>为结构体定义方法</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">struct_name</span> {<br>	<span class="hljs-keyword">fn</span> <span class="hljs-title function_">method_name</span>(&amp;<span class="hljs-keyword">self</span>, args: types) <span class="hljs-punctuation">-&gt;</span> return_type {<br>		...<br>	}<br>}<br></code></pre></td></tr></table></figure>
+<p>方法的第一个参数必须是 <code>self</code> 或者 <code>&amp;self</code>。用 <code>.</code> 调用。</p>
+<p><code>impl</code> 块中定义的函数称为 <strong>关联函数</strong>。也可以定义第一个参数不是 <code>self</code> 的函数，用 <code>::</code> 调用。</p>
+<p>最常见的不是方法的关联函数是 <code>new</code> 函数，返回一个结构体的实例。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> {<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">square</span>(size: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> {<br>        <span class="hljs-keyword">Self</span> {<br>            width: size,<br>            height: size,<br>        }<br>    }<br>}<br></code></pre></td></tr></table></figure>
+<p>关键字 <code>Self</code> 在函数的返回类型和函数体中，都是对 <code>impl</code> 关键字后所示类型的别名，这里是 <code>Rectangle</code>。</p>
+<h1 id="枚举和模式匹配"><a href="#枚举和模式匹配" class="headerlink" title="枚举和模式匹配"></a>枚举和模式匹配</h1><blockquote>
+<p>结构体给予你将字段和数据聚合在一起的方法，像 Rectangle 结构体有 width 和 height 两个字段。而枚举给予你一个途径去声明某个值是一个集合中的一员。</p>
+</blockquote>
+<p>C 语言的枚举可以看作一种宏替换，把一个字符串替换成一个数字。rust 的枚举要强大很多很多。</p>
+<p>rust 的枚举类型的每一个成员称为 <strong>变体</strong>（<em>variants</em>）。变体是可以携带数据的，而且允许不同变体数据类型不同。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">enum</span> <span class="hljs-title class_">enum_name</span> {<br>	<span class="hljs-title function_ invoke__">var</span>(<span class="hljs-keyword">type</span>),<br>}<br></code></pre></td></tr></table></figure>
+<p>也可以为枚举类型定义方法，和结构体差不多。</p>
+<h2 id="Option-枚举"><a href="#Option-枚举" class="headerlink" title="Option 枚举"></a>Option 枚举</h2><p><strong>rust 中没有空值</strong>，取而代之的 <code>Option</code> 枚举。定义为：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Option</span>&lt;T&gt; {<br>    <span class="hljs-literal">None</span>,<br>    <span class="hljs-title function_ invoke__">Some</span>(T),<br>}<br></code></pre></td></tr></table></figure>
+<h2 id="match-控制流结构"><a href="#match-控制流结构" class="headerlink" title="match 控制流结构"></a><code>match</code> 控制流结构</h2><blockquote>
+<p>Rust 有一个叫做 <code>match</code> 的极为强大的控制流运算符，它允许我们将一个值与一系列的模式相比较，并根据相匹配的模式执行相应代码。</p>
+</blockquote>
+<p>上文已有部分介绍。</p>
+<p><code>match</code> 要求分支必须覆盖所有可能。可以用一个随便什么名字的变量匹配没有被前面匹配的所有值，这个分支必须放在最后，它后面的分支都是不可到达的。这种方式会把匹配的值绑定到我们自己命名的变量。也可以用 <code>_</code> 来匹配但不接受值。</p>
+<h2 id="if-let-和-let-else"><a href="#if-let-和-let-else" class="headerlink" title="if let 和 let else"></a><code>if let</code> 和 <code>let else</code></h2><blockquote>
+<p>换句话说，可以认为 <code>if let</code> 是 <code>match</code> 的一个语法糖，它当值匹配某一模式时执行代码而忽略所有其他值。</p>
+</blockquote>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">pattern</span> = var {<br>	...<br>}<br></code></pre></td></tr></table></figure>
+<p>可以在后面加一个 <code>else</code> 代码块，效果和 <code>match</code> 中的 <code>_</code> 分支一样。</p>
+<p>我们有时候需要利用 <code>if let</code> 返回值。可以像这样：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">state</span> = <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Coin</span>::<span class="hljs-title function_ invoke__">Quarter</span>(state) = coin {<br>	state<br>} <span class="hljs-keyword">else</span> {<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>;<br>};<br></code></pre></td></tr></table></figure>
+<p>可以用 <code>let else</code> 让它更优雅：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">Coin</span>::<span class="hljs-title function_ invoke__">Quarter</span>(state) = coin <span class="hljs-keyword">else</span> {<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>;<br>};<br></code></pre></td></tr></table></figure>
+<h1 id="常见集合"><a href="#常见集合" class="headerlink" title="常见集合"></a>常见集合</h1><p>Rust 标准库中包含一系列被称为 集合（<em>collections</em>）的非常有用的数据结构。</p>
+<p><a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/collections/index.html">Manual</a></p>
+<p>Rust’s collections can be grouped into four major categories:</p>
+<ul>
+<li>Sequences: <code>Vec</code>, <code>VecDeque</code>, <code>LinkedList</code></li>
+<li>Maps: <code>HashMap</code>, <code>BTreeMap</code></li>
+<li>Sets: <code>HashSet</code>, <code>BTreeSet</code></li>
+<li>Misc: <code>BinaryHeap</code></li>
+</ul>
+<h2 id="Vec"><a href="#Vec" class="headerlink" title="Vec"></a>Vec</h2><h3 id="新建-vector"><a href="#新建-vector" class="headerlink" title="新建 vector"></a>新建 vector</h3><p>空的：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-keyword">type</span>&gt; = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();<br></code></pre></td></tr></table></figure>
+<p>必须标注类型。</p>
+<p>带值的可以用 <code>Vec!</code> 宏：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = Vec![<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br></code></pre></td></tr></table></figure>
+<p>会自动推断类型。</p>
 
                 
               </div>
