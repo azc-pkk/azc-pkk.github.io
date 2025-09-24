@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://www.rust-lang.org/static/images/rust-logo-blk.svg">
 <meta property="article:published_time" content="2025-09-18T02:48:07.000Z">
-<meta property="article:modified_time" content="2025-09-19T06:33:32.016Z">
+<meta property="article:modified_time" content="2025-09-24T13:41:11.516Z">
 <meta property="article:author" content="北大门淋雨">
 <meta property="article:tag" content="Rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -349,7 +349,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.5k 字
+          4.2k 字
         
       </span>
     
@@ -360,7 +360,7 @@ mjx-container[display="true"] + br {
         
         
         
-          30 分钟
+          36 分钟
         
       </span>
     
@@ -402,7 +402,7 @@ mjx-container[display="true"] + br {
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2025-09-19T14:33:32+08:00
+                    本文最后更新于 2025-09-24T21:41:11+08:00
                   
                   
 
@@ -555,14 +555,12 @@ mjx-container[display="true"] + br {
 <li>值在任一时刻有且只有一个所有者。</li>
 <li>当所有者离开作用域，这个值将被丢弃。</li>
 </ol>
-<h2 id="所有权系统的实现"><a href="#所有权系统的实现" class="headerlink" title="所有权系统的实现"></a>所有权系统的实现</h2><p><strong>部分为笔者猜测，未经考察</strong></p>
-<h3 id="第一、二条规则的实现"><a href="#第一、二条规则的实现" class="headerlink" title="第一、二条规则的实现"></a>第一、二条规则的实现</h3><p>再次强调一点，所有权规则本质上是编译器约束 rust 书写的源代码，并不是在二进制文件中实现了这套规则。</p>
+<h2 id="所有权规则详解"><a href="#所有权规则详解" class="headerlink" title="所有权规则详解"></a>所有权规则详解</h2><h3 id="第二条规则"><a href="#第二条规则" class="headerlink" title="第二条规则"></a>第二条规则</h3><p>再次强调一点，所有权规则本质上是编译器约束 rust 书写的源代码，并不是在二进制文件中实现了这套规则。</p>
 <p>形如</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"value"</span>);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">s2</span> = s1;<br></code></pre></td></tr></table></figure>
-<p>这种代码被 rust 称为 <strong>移动（move）</strong>。本质上是浅拷贝（复制指向堆区的指针而不是重新申请一片堆区内存）加上 rust 编译器的检查机制。实际存储 <code>"value"</code> 的堆内存所有权被转移给了 <code>s2</code>，此后 <code>s1</code> 无权再使用这片内存（在编译阶段检查）。这就是第二条规则。</p>
+<p>这种代码被 rust 称为 <strong>移动（move）</strong>。本质上是浅拷贝（复制指向堆区的指针而不是重新申请一片堆区内存）加上 rust 编译器的检查机制。实际存储 <code>"value"</code> 的堆内存所有权被转移给了 <code>s2</code>，此后 <code>s1</code> 无权再使用这片内存（在编译阶段检查）。</p>
 <p>BTW，在 rust 中，深拷贝由 <code>.clone()</code> 函数实现。</p>
-<p>第一条规则好像不需要实现。</p>
-<h3 id="第三条规则的实现"><a href="#第三条规则的实现" class="headerlink" title="第三条规则的实现"></a>第三条规则的实现</h3><p>每种类型都可以实现两种特殊的 trait，<code>Copy</code>和 <code>Drop</code>。</p>
+<h3 id="第三条规则"><a href="#第三条规则" class="headerlink" title="第三条规则"></a>第三条规则</h3><p>每种类型都可以实现两种特殊的 trait，<code>Copy</code>和 <code>Drop</code>。</p>
 <p>如果一种类型实现了 <code>Drop</code> trait， rust 编译器将会在这个类型的所有实例离开其所在作用域时调用 <code>drop</code> 函数。</p>
 <p>一个类型不能同时实现 <code>Copy</code> 和 <code>Drop</code>。</p>
 <p>当一个 Rust 结构体既没有实现 <code>Copy</code> trait 又没有实现 <code>Drop</code> trait时，Rust 会在其作用域结束时自动调用析构器并释放其内存。</p>
@@ -591,7 +589,7 @@ mjx-container[display="true"] + br {
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"hello world"</span>);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">hello</span> = &amp;s[<span class="hljs-number">0</span>..<span class="hljs-number">5</span>];<br><span class="hljs-keyword">let</span> <span class="hljs-variable">world</span> = &amp;s[<span class="hljs-number">6</span>..<span class="hljs-number">11</span>];<br></code></pre></td></tr></table></figure>
 <p><img src="https://kaisery.github.io/trpl-zh-cn/img/trpl04-07.svg" srcset="/img/loading.gif" lazyload alt="偷来的图"><br>字符串 slice 的类型是 <code>&amp;str</code>，<code>i32</code> 数组的 slice 类型是 <code>&amp;[i32]</code>。</p>
 <h1 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h1><p>感觉更像是类（class）。</p>
-<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">name</span>{<br>	var: <span class="hljs-title function_ invoke__">type</span>(,)<br>}<br></code></pre></td></tr></table></figure>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">name</span>{<br>	var: <span class="hljs-keyword">type</span>,<br>}<br></code></pre></td></tr></table></figure>
 <p>最后不用加分号。</p>
 <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">inst</span> = struct_name{<br>	var_name: val,<br>};<br></code></pre></td></tr></table></figure>
 <p>参数和字段名相同可以简写：</p>
@@ -631,7 +629,7 @@ mjx-container[display="true"] + br {
 <h2 id="match-控制流结构"><a href="#match-控制流结构" class="headerlink" title="match 控制流结构"></a><code>match</code> 控制流结构</h2><blockquote>
 <p>Rust 有一个叫做 <code>match</code> 的极为强大的控制流运算符，它允许我们将一个值与一系列的模式相比较，并根据相匹配的模式执行相应代码。</p>
 </blockquote>
-<p>上文已有部分介绍。</p>
+<p>上文已有 [[#<code>match</code> 关键字| <code>match</code> 关键字]]。</p>
 <p><code>match</code> 要求分支必须覆盖所有可能。可以用一个随便什么名字的变量匹配没有被前面匹配的所有值，这个分支必须放在最后，它后面的分支都是不可到达的。这种方式会把匹配的值绑定到我们自己命名的变量。也可以用 <code>_</code> 来匹配但不接受值。</p>
 <h2 id="if-let-和-let-else"><a href="#if-let-和-let-else" class="headerlink" title="if let 和 let else"></a><code>if let</code> 和 <code>let else</code></h2><blockquote>
 <p>换句话说，可以认为 <code>if let</code> 是 <code>match</code> 的一个语法糖，它当值匹配某一模式时执行代码而忽略所有其他值。</p>
@@ -657,6 +655,29 @@ mjx-container[display="true"] + br {
 <p>带值的可以用 <code>Vec!</code> 宏：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = Vec![<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br></code></pre></td></tr></table></figure>
 <p>会自动推断类型。</p>
+<p>（TODO）</p>
+<h1 id="神秘的生命周期"><a href="#神秘的生命周期" class="headerlink" title="神秘的生命周期"></a>神秘的生命周期</h1><h2 id="awc实现个链表怎么这么难"><a href="#awc实现个链表怎么这么难" class="headerlink" title="awc实现个链表怎么这么难"></a>awc实现个链表怎么这么难</h2><p>写代码时有一个常见的需求是定义一个有指针类型成员变量的结构体。在 Rust 中，直接这么定义是不行的：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">aaa</span> {<br>    a: &amp;<span class="hljs-type">str</span>,<br>}<br></code></pre></td></tr></table></figure>
+<p>报错为：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sh">error[E0106]: missing lifetime specifier<br>  --&gt; src\storage\b_plus_tree.rs:22:8<br>   |<br>22 |     a: &amp;str,<br>   |        ^ expected named lifetime parameter<br>   |<br></code></pre></td></tr></table></figure>
+<p>这是因为，我们不知道 <code>a</code> 指向的值在什么时候被释放，如果 <code>a</code> 执行的值被释放而 <code>a</code> 依然存在，就会产生危险的<strong>悬垂引用</strong>（<em>dangling references</em>）。在 pwn 题中，这种 Use After Free 漏洞是常见且有用的。</p>
+<p>为了解决悬垂引用的问题，Rust 引入了<strong>生命周期</strong>（<em>lifetime</em>）的概念。</p>
+<p>生命周期是一种泛型。不同于确保类型有期望的行为，生命周期用于保证引用在我们需要的整个期间内都是有效的。</p>
+<p>Rust 中的每一个引用都有其生命周期，也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，有时候需要手动标注。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ImportantExcerpt</span>&lt;<span class="hljs-symbol">'a</span>&gt; {<br>    part: &amp;<span class="hljs-symbol">'a</span> <span class="hljs-type">str</span>,<br>}<br></code></pre></td></tr></table></figure>
+<p>这个生命周期标注表示 <code>part</code> 指向的值必须起码和 <code>ImportantExcerpt</code> 实例活得一样久。换言之，<strong>只要该实例还没有被释放，Rust 就不会让 <code>part</code> 指向的值被释放</strong>。</p>
+<p>像下面这种写法是无法编译的：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ImportantExcerpt</span>&lt;<span class="hljs-symbol">'a</span>&gt; {<br>    part: &amp;<span class="hljs-symbol">'a</span> <span class="hljs-type">str</span>,<br>}<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {<br>	<span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"hello"</span>);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s_slice</span> = &amp;s[<span class="hljs-number">0</span>..<span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">inst</span> = ImportantExcerpt {<br>        part: s_slice<br>    };<br>    <span class="hljs-title function_ invoke__">consume</span>(s);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">inst2</span> = inst;<br>}<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">consume</span>(s: <span class="hljs-type">String</span>) {<br><br>}<br></code></pre></td></tr></table></figure>
+<p>报错：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs sh">error[E0505]: cannot move out of `s` because it is borrowed<br>  --&gt; src\main.rs:11:13<br>   |<br> 6 |     <span class="hljs-built_in">let</span> s = String::from(<span class="hljs-string">"hello"</span>);<br>   |         - binding `s` declared here<br> 7 |     <span class="hljs-built_in">let</span> s_slice = &amp;s[0..2];<br>   |                    - borrow of `s` occurs here<br>...<br>11 |     consume(s);<br>   |             ^ move out of `s` occurs here<br>12 |     <span class="hljs-built_in">let</span> inst2 = inst;<br>   |                 ---- borrow later used here<br>   |<br></code></pre></td></tr></table></figure>
+<p>看起来我们好像解决了在 <em>结构体中使用指针</em> 的问题，实际上并没有。以下代码是无法通过编译的：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ImportantExcerpt</span>&lt;<span class="hljs-symbol">'a</span>&gt; {<br>    part: &amp;<span class="hljs-symbol">'a</span> <span class="hljs-type">str</span>,<br>}<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {<br>	<span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"hello"</span>);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s2</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">"world"</span>);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s1_slice</span> = &amp;s1[<span class="hljs-number">0</span>..<span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s2_slice</span> = &amp;s2[<span class="hljs-number">0</span>..<span class="hljs-number">2</span>];<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">inst1</span> = ImportantExcerpt {<br>        part: s1_slice<br>    };<br>    inst1.part = s2_slice;<br>    <br>    <span class="hljs-title function_ invoke__">consume</span>(s1);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">inst2</span> = inst1;<br>}<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">consume</span>(s: <span class="hljs-type">String</span>) {<br><br>}<br></code></pre></td></tr></table></figure>
+<p>报错如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs sh">error[E0505]: cannot move out of `s1` because it is borrowed<br>  --&gt; src\main.rs:15:13<br>   |<br> 6 |     <span class="hljs-built_in">let</span> s1 = String::from(<span class="hljs-string">"hello"</span>);<br>   |         -- binding `s1` declared here<br> 7 |     <span class="hljs-built_in">let</span> s2 = String::from(<span class="hljs-string">"world"</span>);<br> 8 |     <span class="hljs-built_in">let</span> s1_slice = &amp;s1[0..2];<br>   |                     -- borrow of `s1` occurs here<br>...<br>15 |     consume(s1);<br>   |             ^^ move out of `s1` occurs here<br>16 |     <span class="hljs-built_in">let</span> inst2 = inst1;<br>   |                 ----- borrow later used here<br></code></pre></td></tr></table></figure>
+<p>虽然 <code>inst1.part</code> 被重新赋值为了 <code>s2_slice</code>，但 Rust 借用检查器依旧会认为 <code>s1</code> 生命周期不应该在 <code>inst1</code> 前结束。</p>
+<p>这就很尴尬了，假设我们要实现一个链表，需要支持插入删除操作。删除节点时必然会发生类似上面的行为，而这样是不能通过编译的。要彻底解决这个问题，还得看下一章的智能指针。</p>
+<h2 id="从函数返回引用"><a href="#从函数返回引用" class="headerlink" title="从函数返回引用"></a>从函数返回引用</h2><p>当从函数返回一个引用，返回值的生命周期参数需要与一个参数的生命周期参数相匹配。如果返回的引用没有指向任何一个参数，那么唯一的可能就是它指向一个函数内部创建的值。然而它将会是一个悬垂引用，因为它将会在函数结束时离开作用域。</p>
+<h1 id="神秘的智能指针"><a href="#神秘的智能指针" class="headerlink" title="神秘的智能指针"></a>神秘的智能指针</h1><p>(TODO)</p>
 
                 
               </div>
